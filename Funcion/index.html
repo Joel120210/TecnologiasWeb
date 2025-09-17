@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Graficador de funciones</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Graficador de funciones</h1>
+
+    <form id="form" class="controls" onsubmit="return false;">
+      <label>
+        Función (usa <code>x</code>, funciones de Math como <code>sin, cos, log, exp, sqrt</code>):
+        <input id="expr" placeholder="ej. sin(x) + x/2" value="sin(x)" />
+      </label>
+
+      <div class="row">
+        <label>
+          xmin:
+          <input id="xmin" type="number" step="any" value="-10" />
+        </label>
+        <label>
+          xmax:
+          <input id="xmax" type="number" step="any" value="10" />
+        </label>
+        <label>
+          muestras:
+          <input id="samples" type="number" min="10" max="5000" value="800" />
+        </label>
+      </div>
+
+      <div class="row buttons">
+        <button id="plot">Graficar</button>
+        <button id="clear">Limpiar</button>
+      </div>
+
+      <p class="help">Consejos: puedes usar <code>^</code> para potencia (p. ej. <code>x^2</code>) — se convertirá internamente a operador **. Evita código malicioso; solo expresiones matemáticas con <code>x</code> y funciones matemáticas.</p>
+    </form>
+
+    <section class="canvas-wrap">
+      <canvas id="canvas" width="900" height="500"></canvas>
+    </section>
+
+    <footer>
+      <small>Hecho con HTML/CSS/JS — escribe la función y pulsa "Graficar". @Joel</small>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
