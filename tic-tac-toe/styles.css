@@ -1,0 +1,107 @@
+/* Estilo general */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #6a1b1b, #8e0000); /* Guinda Morena */
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Título */
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #f9e79f; /* Dorado claro */
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+
+/* Botones de selección de modo */
+#mode-selection button {
+  margin: 10px;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #b71c1c; /* Guinda fuerte */
+  color: #fff;
+  transition: transform 0.2s, background 0.3s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+#mode-selection button:hover {
+  background: #d32f2f; /* Rojo más vivo */
+  transform: scale(1.1);
+}
+
+/* Tablero */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 110px);
+  grid-template-rows: repeat(3, 110px);
+  gap: 10px;
+  margin: 25px auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+/* Celdas */
+.cell {
+  width: 110px;
+  height: 110px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid #f9e79f; /* Bordes dorados */
+  font-size: 2.8rem;
+  font-weight: bold;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s, color 0.3s;
+}
+
+.cell:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+  color: #f9e79f; /* Letras doradas al pasar */
+}
+
+/* Texto de estado */
+#status {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 15px 0;
+  color: #fff;
+  text-shadow: 1px 1px 6px rgba(0,0,0,0.6);
+}
+
+/* Botón reinicio */
+#reset {
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background: #b71c1c; /* Guinda */
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+#reset:hover {
+  background: #d32f2f; /* Rojo vivo */
+  transform: scale(1.1);
+}
