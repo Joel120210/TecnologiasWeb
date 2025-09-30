@@ -1,50 +1,63 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Graficador de funciones</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graficador estilo GeoGebra</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <main class="container">
-    <h1>Graficador de funciones</h1>
+    <h1>
+      <!-- Ícono SVG estilo GeoGebra -->
+      <span style="vertical-align: middle; margin-right: 10px;">
+        <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+          <circle cx="19" cy="19" r="17" stroke="#2980b9" stroke-width="3" fill="#eaf6fb"/>
+          <circle cx="19" cy="7" r="3" fill="#1abc9c"/>
+          <circle cx="30" cy="19" r="3" fill="#1abc9c"/>
+          <circle cx="19" cy="31" r="3" fill="#1abc9c"/>
+          <circle cx="8" cy="19" r="3" fill="#1abc9c"/>
+        </svg>
+      </span>
+      Graficador de funciones
+    </h1>
 
-    <form id="form" class="controls" onsubmit="return false;">
-      <label>
-        Función (usa <code>x</code>, funciones de Math como <code>sin, cos, log, exp, sqrt</code>):
-        <input id="expr" placeholder="ej. sin(x) + x/2" value="sin(x)" />
-      </label>
+    <!-- Display -->
+    <div class="display-wrap">
+      <input id="expr" type="text" placeholder="Ejemplo: sin(x) + x^2">
+      <button id="plot">Graficar</button>
+      <button id="clear">Limpiar</button>
+      <button id="toggleKeyboard">Teclado</button>
+    </div>
 
-      <div class="row">
-        <label>
-          xmin:
-          <input id="xmin" type="number" step="any" value="-10" />
-        </label>
-        <label>
-          xmax:
-          <input id="xmax" type="number" step="any" value="10" />
-        </label>
-        <label>
-          muestras:
-          <input id="samples" type="number" min="10" max="5000" value="800" />
-        </label>
+    <!-- Teclado matemático flotante -->
+    <div class="keyboard" id="keyboard">
+      <div class="keys">
+        <!-- Números -->
+        <button>7</button><button>8</button><button>9</button><button>(</button><button>)</button>
+        <button>4</button><button>5</button><button>6</button><button>+</button><button>-</button>
+        <button>1</button><button>2</button><button>3</button><button>*</button><button>/</button>
+        <button>0</button><button>.</button><button>x</button><button>^</button><button>√</button>
+
+        <!-- Funciones -->
+        <button>sin</button><button>cos</button><button>tan</button><button>log</button><button>ln</button>
+        <button>abs</button><button>exp</button><button>asin</button><button>acos</button><button>atan</button>
+
+        <!-- Constantes -->
+        <button>π</button><button>e</button><button>%</button><button>|x|</button><button>x²</button>
+
+        <!-- Controles -->
+        <button>←</button><button>C</button><button>=</button>
       </div>
+    </div>
 
-      <div class="row buttons">
-        <button id="plot">Graficar</button>
-        <button id="clear">Limpiar</button>
-      </div>
-
-      <p class="help">Consejos: puedes usar <code>^</code> para potencia (p. ej. <code>x^2</code>) — se convertirá internamente a operador **. Evita código malicioso; solo expresiones matemáticas con <code>x</code> y funciones matemáticas.</p>
-    </form>
-
+    <!-- Lienzo -->
     <section class="canvas-wrap">
       <canvas id="canvas" width="900" height="500"></canvas>
     </section>
 
     <footer>
-      <small>Hecho con HTML/CSS/JS — escribe la función y pulsa "Graficar". @Joel</small>
+      <small>Hecho al estilo GeoGebra — @Joel</small>
     </footer>
   </main>
 

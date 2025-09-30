@@ -1,139 +1,220 @@
-(function () {
-  const $ = id => document.getElementById(id);
-  const canvas = $('canvas');
-  const ctx = canvas.getContext('2d');
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const exprInput = document.getElementById("expr");
+const plotBtn = document.getElementById("plot");
+const clearBtn = document.getElementById("clear");
+const keyboard = document.getElementById("keyboard");
+const toggleKeyboard = document.getElementById("toggleKeyboard");
 
-  function resizeCanvas() {
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = Math.round(rect.width * devicePixelRatio);
-    canvas.height = Math.round(rect.height * devicePixelRatio);
-    ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-  }
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
+// Mostrar/ocultar teclado
+toggleKeyboard.addEventListener("click", () => {
+  keyboard.classList.toggle("show");
+});
 
-  function clear() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
-
-  function drawAxes(xmin, xmax, ymin, ymax) {
-    const w = canvas.clientWidth, h = canvas.clientHeight;
-    ctx.fillStyle = 'rgba(0,0,0,0)';
-    ctx.fillRect(0, 0, w, h);
-
-    ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-    ctx.lineWidth = 1;
-
-    function niceTicks(a, b, n) {
-      const span = b - a; if (span === 0) return [a];
-      const raw = span / n;
-      const pow = Math.pow(10, Math.floor(Math.log10(raw)));
-      const mul = [1, 2, 5, 10].find(m => raw / pow <= m) || 10;
-      const step = pow * mul;
-      const start = Math.ceil(a / step) * step;
-      const ticks = [];
-      for (let v = start; v <= b + 1e-9; v += step) ticks.push(+v.toFixed(12));
-      return ticks;
+// Insertar teclas en el input
+keyboard.addEventListener("click", (e) => {
+  if (e.target.tagName === "BUTTON") {
+    let key = e.target.textContent;
+    if (key === "←") {
+      exprInput.value = exprInput.value.slice(0, -1);
+    } else if (key === "C") {
+      exprInput.value = "";
+    } else if (key === "=") {
+      plot();
+    } else if (key === "x²") {
+      exprInput.value += "^2";
+    } else if (key === "|x|") {
+      exprInput.value += "abs(x)";
+    } else if (key === "%") {
+      exprInput.value += "/100";
+    } else {
+      exprInput.value += key;
     }
+    exprInput.focus();
+  }
+});
 
-    const xticks = niceTicks(xmin, xmax, 10);
-    const yticks = niceTicks(ymin, ymax, 8);
+function parseExpression(expr) {
+  return expr
+    .replace(/\^/g, "**")
+    .replace(/π/g, "Math.PI")
+    .replace(/e/g, "Math.E")
+    .replace(/√/g, "Math.sqrt")
+    .replace(/sin/g, "Math.sin")
+    .replace(/cos/g, "Math.cos")
+    .replace(/tan/g, "Math.tan")
+    .replace(/log/g, "Math.log10")
+    .replace(/ln/g, "Math.log")
+    .replace(/abs/g, "Math.abs")
+    .replace(/exp/g, "Math.exp")
+    .replace(/asin/g, "Math.asin")
+    .replace(/acos/g, "Math.acos")
+    .replace(/atan/g, "Math.atan");
+}
 
+function plot() {
+  const expr = exprInput.value;
+  if (!expr) return;
+
+  const parsed = parseExpression(expr);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Configuración
+  const width = canvas.width;
+  const height = canvas.height;
+  const xmin = -10, xmax = 10;
+  const ymin = -10, ymax = 10;
+
+  const scaleX = width / (xmax - xmin);
+  const scaleY = height / (ymax - ymin);
+
+    // Dibuja el plano cartesiano mejorado
+    drawAxes(ctx, width, height, xmin, xmax, ymin, ymax, scaleX, scaleY);
+function drawAxes(ctx, width, height, xmin, xmax, ymin, ymax, scaleX, scaleY) {
+  // Fondo degradado
+  const gradient = ctx.createLinearGradient(0, 0, width, height);
+  gradient.addColorStop(0, "#f7fbff");
+  gradient.addColorStop(1, "#e0eafc");
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.save();
+
+  // Líneas secundarias (cuadricula)
+  ctx.strokeStyle = "#b2bec3";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 6]);
+  // Verticales
+  for (let x = Math.ceil(xmin); x <= xmax; x++) {
+    const px = (x - xmin) * scaleX;
     ctx.beginPath();
-    xticks.forEach(x => {
-      const sx = (x - xmin) / (xmax - xmin) * w;
-      ctx.moveTo(sx, 0); ctx.lineTo(sx, h);
-    });
-    yticks.forEach(y => {
-      const sy = h - (y - ymin) / (ymax - ymin) * h;
-      ctx.moveTo(0, sy); ctx.lineTo(w, sy);
-    });
-    ctx.stroke();
-
-    ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 1.5;
-    if (ymin < 0 && ymax > 0) {
-      const sy = h - (0 - ymin) / (ymax - ymin) * h;
-      ctx.beginPath(); ctx.moveTo(0, sy); ctx.lineTo(w, sy); ctx.stroke();
-    }
-    if (xmin < 0 && xmax > 0) {
-      const sx = (0 - xmin) / (xmax - xmin) * w;
-      ctx.beginPath(); ctx.moveTo(sx, 0); ctx.lineTo(sx, h); ctx.stroke();
-    }
-
-    ctx.fillStyle = 'rgba(230,238,246,0.9)'; ctx.font = '12px system-ui';
-    xticks.forEach(x => {
-      const sx = (x - xmin) / (xmax - xmin) * w;
-      ctx.fillText(String(x), sx + 4, h - 6);
-    });
-    yticks.forEach(y => {
-      const sy = h - (y - ymin) / (ymax - ymin) * h;
-      ctx.fillText(String(y), 6, sy - 6);
-    });
-  }
-
-  function plotFunction(fn, xmin, xmax, samples) {
-    const w = canvas.clientWidth, h = canvas.clientHeight;
-    let xs = [], ys = [];
-    for (let i = 0; i < samples; i++) {
-      const t = i / (samples - 1);
-      const x = xmin + t * (xmax - xmin);
-      let y;
-      try { y = fn(x); if (!isFinite(y)) y = NaN; } catch (e) { y = NaN }
-      xs.push(x); ys.push(y);
-    }
-    const yvals = ys.filter(v => Number.isFinite(v));
-    if (yvals.length === 0) return;
-    let ymin = Math.min(...yvals), ymax = Math.max(...yvals);
-    if (ymin === ymax) { ymin -= 1; ymax += 1 }
-    const pad = (ymax - ymin) * 0.12;
-    ymin -= pad; ymax += pad;
-
-    clear();
-    drawAxes(xmin, xmax, ymin, ymax);
-
-    ctx.beginPath(); ctx.lineWidth = 2; ctx.strokeStyle = '#6dd3ff';
-    let started = false;
-    for (let i = 0; i < xs.length; i++) {
-      const x = xs[i], y = ys[i];
-      if (!Number.isFinite(y)) { started = false; continue }
-      const sx = (x - xmin) / (xmax - xmin) * w;
-      const sy = h - (y - ymin) / (ymax - ymin) * h;
-      if (!started) { ctx.moveTo(sx, sy); started = true } else ctx.lineTo(sx, sy);
-    }
+    ctx.moveTo(px, 0);
+    ctx.lineTo(px, height);
     ctx.stroke();
   }
-
-  function safeMakeFunction(expr) {
-    const banned = ['window', 'document', 'eval', 'Function', 'fetch', 'XMLHttpRequest', 'require', 'import', 'process', 'while(true)', '=>', 'constructor'];
-    const lower = expr.toLowerCase();
-    for (const b of banned) if (lower.includes(b)) throw new Error('Expresión no segura');
-
-    expr = expr.replace(/\^/g, '**');
-
-    if (!/^[0-9xX+\-*/%().,\s\^eE\*\*a-zA-Z_]*$/.test(expr)) 
-      throw new Error('Caracteres inválidos en la expresión');
-
-    let fn;
-    try {
-      fn = new Function('x', 'with(Math){ return ' + expr + ' }');
-      fn(1);
-    } catch (e) { throw new Error('No se pudo compilar la expresión'); }
-    return fn;
+  // Horizontales
+  for (let y = Math.ceil(ymin); y <= ymax; y++) {
+    const py = height - ((y - ymin) * scaleY);
+    ctx.beginPath();
+    ctx.moveTo(0, py);
+    ctx.lineTo(width, py);
+    ctx.stroke();
   }
+  ctx.setLineDash([]);
 
-  $('plot').addEventListener('click', () => {
-    const expr = $('expr').value.trim();
-    const xmin = parseFloat($('xmin').value);
-    const xmax = parseFloat($('xmax').value);
-    const samples = parseInt($('samples').value, 10) || 400;
-    if (isNaN(xmin) || isNaN(xmax) || xmin >= xmax) { alert('Rango inválido'); return }
+  // Ejes principales
+  ctx.strokeStyle = "#2980b9";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  // Eje X
+  ctx.moveTo(0, height / 2);
+  ctx.lineTo(width, height / 2);
+  // Eje Y
+  ctx.moveTo(width / 2, 0);
+  ctx.lineTo(width / 2, height);
+  ctx.stroke();
+
+  // Flechas estilizadas en los extremos
+  function drawArrow(x, y, dx, dy, color) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(Math.atan2(dy, dx));
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(-8, -5);
+    ctx.lineTo(-8, 5);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.restore();
+  }
+  // Flecha eje X derecha
+  drawArrow(width, height / 2, 1, 0, "#2980b9");
+  // Flecha eje X izquierda
+  drawArrow(0, height / 2, -1, 0, "#2980b9");
+  // Flecha eje Y arriba
+  drawArrow(width / 2, 0, 0, -1, "#2980b9");
+  // Flecha eje Y abajo
+  drawArrow(width / 2, height, 0, 1, "#2980b9");
+
+  // Marcas y etiquetas con fondo
+  ctx.font = "14px Segoe UI";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  for (let x = Math.ceil(xmin); x <= xmax; x++) {
+    if (x === 0) continue;
+    const px = (x - xmin) * scaleX;
+    // Marca
+    ctx.beginPath();
+    ctx.moveTo(px, height / 2 - 8);
+    ctx.lineTo(px, height / 2 + 8);
+    ctx.strokeStyle = "#2980b9";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // Etiqueta con fondo
+    ctx.save();
+    ctx.fillStyle = "#eaf6fb";
+    ctx.fillRect(px - 14, height / 2 + 10, 28, 20);
+    ctx.fillStyle = "#34495e";
+    ctx.fillText(x, px, height / 2 + 14);
+    ctx.restore();
+  }
+  ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
+  for (let y = Math.ceil(ymin); y <= ymax; y++) {
+    if (y === 0) continue;
+    const py = height - ((y - ymin) * scaleY);
+    // Marca
+    ctx.beginPath();
+    ctx.moveTo(width / 2 - 8, py);
+    ctx.lineTo(width / 2 + 8, py);
+    ctx.strokeStyle = "#2980b9";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // Etiqueta con fondo
+    ctx.save();
+    ctx.fillStyle = "#eaf6fb";
+    ctx.fillRect(width / 2 - 52, py - 10, 32, 20);
+    ctx.fillStyle = "#34495e";
+    ctx.fillText(y, width / 2 - 20, py);
+    ctx.restore();
+  }
+  // Origen destacado
+  ctx.beginPath();
+  ctx.arc(width / 2, height / 2, 6, 0, 2 * Math.PI);
+  ctx.fillStyle = "#1abc9c";
+  ctx.fill();
+  ctx.restore();
+}
+
+  // Graficar función
+  ctx.strokeStyle = "#e74c3c";
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  let first = true;
+  for (let px = 0; px < width; px++) {
+    const x = xmin + (px / scaleX);
+    let y;
     try {
-      const fn = safeMakeFunction(expr);
-      plotFunction(fn, xmin, xmax, samples);
-    } catch (e) { alert('Error: ' + e.message) }
-  });
+      y = eval(parsed.replace(/x/g, `(${x})`));
+    } catch {
+      continue;
+    }
+    const py = height - ((y - ymin) * scaleY);
 
-  $('clear').addEventListener('click', () => { clear(); });
+    if (first) {
+      ctx.moveTo(px, py);
+      first = false;
+    } else {
+      ctx.lineTo(px, py);
+    }
+  }
+  ctx.stroke();
+}
 
-  $('plot').click();
-})();
+plotBtn.addEventListener("click", plot);
+clearBtn.addEventListener("click", () => {
+  exprInput.value = "";
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
