@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graficador de Funciones Matemáticas</title>
+    <!-- Incluyendo Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilo para un cuerpo con un degradado sutil */
+        body {
+            background-color: #f0f4f8; /* Color de fondo base */
+        }
+        /* Estilo para el contenedor principal para que tenga una sombra y bordes redondeados */
+        .main-container {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-radius: 1.5rem; /* Bordes más redondeados */
+        }
+        /* Estilo para los campos de entrada */
+        .input-field {
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 font-sans">
+
+    <div class="main-container w-full max-w-4xl bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+
+        <!-- Encabezado -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">Graficador de Funciones</h1>
+            <p class="text-gray-500 mt-2">Ingresa una función de <code class="bg-gray-200 text-sm p-1 rounded">x</code> para ver su gráfica.</p>
+        </div>
+
+        <!-- Panel de Controles -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <!-- Entrada de la Función -->
+            <div class="md:col-span-3">
+                <label for="function-input" class="block text-sm font-medium text-gray-700 mb-2">Función y = f(x)</label>
+                <input type="text" id="function-input" value="Math.sin(x)" class="input-field w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                 <p id="error-message" class="text-red-500 text-sm mt-2 h-5"></p> <!-- Mensaje de error -->
+            </div>
+            
+            <!-- Rango de los Ejes -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 md:col-span-3">
+                <div>
+                    <label for="x-min" class="block text-sm font-medium text-gray-700">X Mín</label>
+                    <input type="number" id="x-min" value="-10" class="input-field w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none">
+                </div>
+                <div>
+                    <label for="x-max" class="block text-sm font-medium text-gray-700">X Máx</label>
+                    <input type="number" id="x-max" value="10" class="input-field w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none">
+                </div>
+                <div>
+                    <label for="y-min" class="block text-sm font-medium text-gray-700">Y Mín</label>
+                    <input type="number" id="y-min" value="-2" class="input-field w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none">
+                </div>
+                <div>
+                    <label for="y-max" class="block text-sm font-medium text-gray-700">Y Máx</label>
+                    <input type="number" id="y-max" value="2" class="input-field w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Canvas para el Gráfico -->
+        <div class="w-full bg-white border border-gray-200 rounded-xl overflow-hidden shadow-inner">
+             <canvas id="plot-canvas" class="w-full"></canvas>
+        </div>
+        
+    </div>
+
+    <script>
+        // --- ELEMENTOS DEL DOM ---
+        const canvas = document.getElementById('plot-canvas');
+        const ctx = canvas.getContext('2d');
+        const functionInput = document.getElementById('function-input');
+        const xMinInput = document.getElementById('x-min');
+        const xMaxInput = document.getElementById('x-max');
+        const yMinInput = document.getElementById('y-min');
+        const yMaxInput = document.getElementById('y-max');
+        const errorMessage = document.getElementById('error-message');
+
+        // --- FUNCIÓN PRINCIPAL DE DIBUJO ---
+        function drawPlot() {
+            // Obtener los valores de los rangos
+            const xMin = parseFloat(xMinInput.value);
+            const xMax = parseFloat(xMaxInput.value);
+            const yMin = parseFloat(yMinInput.value);
+            const yMax = parseFloat(yMaxInput.value);
+            
+            // Validar que los rangos sean números válidos
+            if (isNaN(xMin) || isNaN(xMax) || isNaN(yMin) || isNaN(yMax) || xMin >= xMax || yMin >= yMax) {
+                errorMessage.textContent = "Los rangos de los ejes no son válidos.";
+                return;
+            }
+
+            // Ajustar el tamaño del canvas para que sea nítido en pantallas de alta densidad
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.width * 0.6 * dpr; // Mantener una proporción de aspecto
+            ctx.scale(dpr, dpr);
+            const width = canvas.width / dpr;
+            const height = canvas.height / dpr;
+
+            // Limpiar el canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Función para transformar coordenadas matemáticas a píxeles del canvas
+            const toPixelX = (x) => ((x - xMin) / (xMax - xMin)) * width;
+            const toPixelY = (y) => height - ((y - yMin) / (yMax - yMin)) * height;
+
+            // --- DIBUJAR EJES Y CUADRÍCULA ---
+            ctx.strokeStyle = '#e0e0e0'; // Color de la cuadrícula
+            ctx.lineWidth = 1;
+            ctx.font = `${10}px Arial`;
+            ctx.fillStyle = '#666';
+
+            // Dibujar cuadrícula vertical y etiquetas del eje X
+            for (let i = Math.ceil(xMin); i <= Math.floor(xMax); i++) {
+                const px = toPixelX(i);
+                ctx.beginPath();
+                ctx.moveTo(px, 0);
+                ctx.lineTo(px, height);
+                ctx.stroke();
+                if (i !== 0) ctx.fillText(i, px + 4, toPixelY(0) - 4);
+            }
+
+            // Dibujar cuadrícula horizontal y etiquetas del eje Y
+            for (let i = Math.ceil(yMin); i <= Math.floor(yMax); i++) {
+                const py = toPixelY(i);
+                ctx.beginPath();
+                ctx.moveTo(0, py);
+                ctx.lineTo(width, py);
+                ctx.stroke();
+                 if (i !== 0) ctx.fillText(i, toPixelX(0) + 4, py - 4);
+            }
+
+            // Dibujar ejes principales (X y Y)
+            ctx.strokeStyle = '#999';
+            ctx.lineWidth = 1.5;
+            // Eje X
+            ctx.beginPath();
+            ctx.moveTo(0, toPixelY(0));
+            ctx.lineTo(width, toPixelY(0));
+            ctx.stroke();
+            // Eje Y
+            ctx.beginPath();
+            ctx.moveTo(toPixelX(0), 0);
+            ctx.lineTo(toPixelX(0), height);
+            ctx.stroke();
+            
+            // --- DIBUJAR LA FUNCIÓN ---
+            ctx.strokeStyle = '#3b82f6'; // Color azul para la función
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+
+            let firstPoint = true;
+            errorMessage.textContent = ''; // Limpiar mensaje de error
+            
+            try {
+                // Iterar a través de cada píxel en el eje X para un dibujo suave
+                for (let px = 0; px < width; px++) {
+                    const x = (px / width) * (xMax - xMin) + xMin;
+                    
+                    const functionString = functionInput.value;
+                    const y = new Function('x', `return ${functionString}`)(x);
+                    
+                    if (isFinite(y)) {
+                        const py = toPixelY(y);
+                        if (firstPoint) {
+                            ctx.moveTo(px, py);
+                            firstPoint = false;
+                        } else {
+                            ctx.lineTo(px, py);
+                        }
+                    } else {
+                        firstPoint = true;
+                    }
+                }
+            } catch (error) {
+                errorMessage.textContent = 'Error en la sintaxis de la función.';
+                console.error("Error al evaluar la función:", error);
+            }
+
+            ctx.stroke();
+        }
+
+        // --- EVENT LISTENERS ---
+        window.addEventListener('load', drawPlot);
+        window.addEventListener('resize', drawPlot);
+        [functionInput, xMinInput, xMaxInput, yMinInput, yMaxInput].forEach(input => {
+            input.addEventListener('input', drawPlot);
+        });
+    </script>
+</body>
+</html>

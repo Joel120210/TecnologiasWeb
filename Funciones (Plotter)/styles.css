@@ -1,0 +1,30 @@
+/* Estilo para un cuerpo con un degradado sutil */
+body {
+    background-color: #f0f4f8; /* Color de fondo base */
+}
+
+/* Estilo para el contenedor principal para que tenga una sombra y bordes redondeados */
+.main-container {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 1.5rem; /* Bordes más redondeados */
+}
+
+/* Estilo para los campos de entrada */
+.input-field {
+    transition: all 0.3s ease;
+}
+
+.input-field:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Estilo para el botón (si se añadiera uno en el futuro) */
+.plot-button {
+    transition: all 0.3s ease;
+}
+
+.plot-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
