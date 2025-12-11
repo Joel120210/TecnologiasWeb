@@ -1,0 +1,232 @@
+/* ========== CONFIG GENERAL ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #0a0a0a;
+  color: #fff;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* ========== NAVBAR ========== */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  z-index: 100;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.logo span {
+  color: #ff2e63;
+}
+
+nav a {
+  color: #ccc;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #ff2e63;
+}
+
+/* ========== HERO ========== */
+.hero {
+  height: 100vh;
+  background: url("https://images.unsplash.com/photo-1535223289827-42f1e9919769?auto=format&fit=crop&w=1600&q=60") center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.65);
+}
+
+.hero-content {
+  text-align: center;
+  z-index: 2;
+  max-width: 700px;
+  padding: 0 20px;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  color: #ccc;
+  margin-bottom: 30px;
+}
+
+.hero-content button {
+  background: linear-gradient(90deg, #ff2e63, #ff7f50);
+  border: none;
+  padding: 12px 35px;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.hero-content button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #ff2e63;
+}
+
+/* ========== SECCIONES ========== */
+section {
+  padding: 100px 10%;
+  text-align: center;
+}
+
+h2 {
+  font-size: 2.2rem;
+  color: #ff2e63;
+  margin-bottom: 30px;
+}
+
+/* ========== ABOUT ========== */
+.about p {
+  color: #ddd;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ========== SERVICES ========== */
+.cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.card {
+  background: #141414;
+  border-radius: 15px;
+  padding: 30px;
+  width: 280px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 30px rgba(255, 46, 99, 0.3);
+}
+
+.card h3 {
+  color: #ff2e63;
+  margin-bottom: 10px;
+}
+
+/* ========== PROJECTS ========== */
+.project-gallery {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.project {
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  width: 320px;
+  transition: transform 0.3s;
+}
+
+.project img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.project:hover img {
+  transform: scale(1.1);
+}
+
+.project-info {
+  background: rgba(10, 10, 10, 0.85);
+  padding: 15px;
+}
+
+.project-info h3 {
+  color: #ff2e63;
+}
+
+/* ========== CONTACT ========== */
+.contact p {
+  max-width: 600px;
+  margin: 0 auto 25px;
+  color: #ccc;
+}
+
+.contact button {
+  background: linear-gradient(90deg, #ff2e63, #ff7f50);
+  border: none;
+  padding: 14px 40px;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.contact button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px #ff2e63;
+}
+
+/* ========== FOOTER ========== */
+footer {
+  background: #0a0a0a;
+  text-align: center;
+  padding: 30px;
+  border-top: 1px solid #222;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+/* ========== ANIMACIONES ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
