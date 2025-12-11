@@ -1,0 +1,138 @@
+/* ==================== ESTILOS GENERALES ==================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: #000000; /* negro */
+  color: #f5d67b;      /* dorado suave */
+  text-align: center;
+  overflow-x: hidden;
+}
+
+h1, h2 {
+  color: #ffd700; /* dorado brillante */
+  text-shadow: 2px 2px 6px rgba(255, 215, 0, 0.4);
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #c9b573; /* dorado tenue */
+}
+
+/* ==================== CABECERA ==================== */
+header {
+  background: linear-gradient(180deg, #111 0%, #000 100%);
+  padding: 25px;
+  box-shadow: 0 3px 15px rgba(255, 215, 0, 0.15);
+  border-bottom: 1px solid #d4af37;
+}
+
+/* ==================== PANEL DE CONTROL ==================== */
+.panel {
+  background: #0d0d0d;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 12px;
+  width: 80%;
+  border: 1px solid #d4af3770;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.input-group {
+  margin: 15px 0;
+}
+
+.input-group input {
+  width: 60%;
+  padding: 10px;
+  border: 1px solid #d4af3750;
+  border-radius: 6px;
+  background: #000;
+  color: #f5d67b;
+  font-size: 1rem;
+  outline: none;
+  text-align: center;
+}
+
+/* ==================== RANGOS ==================== */
+.range-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.range label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+  color: #c9b573;
+}
+
+.range input {
+  width: 80px;
+  padding: 5px;
+  border: 1px solid #d4af3750;
+  border-radius: 5px;
+  text-align: center;
+  background: #000;
+  color: #f5d67b;
+}
+
+/* ==================== BOTONES ==================== */
+button {
+  padding: 10px 20px;
+  border: 1px solid #d4af37;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+  font-size: 0.95rem;
+  margin: 5px;
+  color: #000;
+  background: #d4af37;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+button.secondary {
+  background: #b8962d;
+  color: #000;
+}
+
+button.info {
+  background: #ffd700;
+  color: #000;
+}
+
+button:hover {
+  transform: scale(1.06);
+  filter: brightness(1.15);
+}
+
+/* ==================== CANVAS ==================== */
+.canvas-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+canvas {
+  background: #ffffff;
+  border-radius: 10px;
+  border: 2px solid #d4af37;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.35);
+}
+
+/* ==================== FOOTER ==================== */
+footer {
+  background: #0d0d0d;
+  padding: 15px;
+  color: #bfa76a;
+  font-size: 0.9rem;
+  border-top: 1px solid #d4af3730;
+}
