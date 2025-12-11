@@ -1,0 +1,141 @@
+.container {
+    min-height: 100vh;
+    padding: 2rem;
+    background: #f8fafc;
+    color: #1e293b;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    @media (prefers-color-scheme: dark) {
+        background: #0f172a;
+        color: #f1f5f9;
+    }
+}
+
+.header {
+    h1 {
+        font-size: 2.5rem;
+        color: var(--primary);
+    }
+
+    p {
+        color: var(--secondary);
+    }
+
+    margin-bottom: 2rem;
+}
+
+.workspace {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.editor {
+    background: var(--surface);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.controlGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--secondary);
+    }
+
+    select,
+    input {
+        padding: 0.75rem;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: var(--background);
+        color: var(--foreground);
+        font-size: 1rem;
+
+        &:focus {
+            outline: 2px solid var(--primary);
+        }
+    }
+}
+
+.dataForm {
+    display: flex;
+    gap: 0.5rem;
+
+    input {
+        flex: 1;
+    }
+
+    button {
+        padding: 0.75rem;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+}
+
+.dataTable {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+        text-align: left;
+        color: var(--secondary);
+        padding: 0.5rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    td {
+        padding: 0.5rem;
+        border-bottom: 1px solid var(--border);
+
+        &:last-child {
+            text-align: right;
+        }
+    }
+
+    button.deleteBtn {
+        background: none;
+        border: none;
+        color: #ef4444;
+        cursor: pointer;
+        padding: 0.25rem;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.preview {
+    background: var(--surface);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

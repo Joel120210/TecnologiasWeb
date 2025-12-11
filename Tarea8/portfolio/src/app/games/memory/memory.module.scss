@@ -1,0 +1,118 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #050505;
+    color: #10b981;
+}
+
+.header {
+    margin-bottom: 2rem;
+    text-align: center;
+
+    h1 {
+        font-size: 3rem;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        color: #10b981;
+        text-shadow: 0 0 10px #10b981;
+    }
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    max-width: 600px;
+    width: 90vw;
+    perspective: 1000px;
+}
+
+.card {
+    aspect-ratio: 1;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    ;
+    cursor: pointer;
+}
+
+.flipped {
+    transform: rotateY(180deg);
+}
+
+.cardFace {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    border: 2px solid #10b981;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+}
+
+.front {
+    background: #000;
+    color: #10b981;
+    /* Pattern */
+    background-image: radial-gradient(#10b981 1px, transparent 1px);
+    background-size: 10px 10px;
+}
+
+.back {
+    background: #10b981;
+    color: #000;
+    transform: rotateY(180deg);
+    border-color: #fff;
+}
+
+.matched .back {
+    background: #3b82f6;
+    box-shadow: 0 0 20px #3b82f6;
+    border-color: #3b82f6;
+}
+
+.stats {
+    margin-top: 2rem;
+    display: flex;
+    gap: 2rem;
+    font-size: 1.5rem;
+    font-family: monospace;
+}
+
+.winScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+
+    h2 {
+        font-size: 4rem;
+        color: #ffd700;
+        margin-bottom: 2rem;
+    }
+
+    button {
+        padding: 1rem 3rem;
+        background: #10b981;
+        border: none;
+        color: black;
+        font-size: 1.5rem;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+}
